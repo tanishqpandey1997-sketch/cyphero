@@ -1,159 +1,106 @@
+import { LimelightNav } from "@/components/ui/limelight-nav"
 import { 
-  Sidebar,
-  SidebarProvider,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
-
-import { 
-  Home,
-  Compass,
-  Music,
-  TrendingUp,
   UploadCloud,
   Users,
-  MessageSquare,
   Mic2,
-  User,
-  ChevronsUpDown
+  TrendingUp,
+  Music
 } from "lucide-react"
 
-// Menu items mapped directly to CypherConnect Web App Features
-const items = [
-  { title: "Home", url: "#", icon: Home },
-  { title: "Explore", url: "#", icon: Compass },
-  { title: "Beat Market", url: "#", icon: Music },
-  { title: "Trending", url: "#", icon: TrendingUp },
-  { title: "Upload Song", url: "#", icon: UploadCloud },
-  { title: "Collabs", url: "#", icon: Users },
-  { title: "DMs", url: "#", icon: MessageSquare },
-  { title: "Open Mics", url: "#", icon: Mic2 },
-  { title: "Profile", url: "#", icon: User },
-]
+// Minimal clean labels for the Limelight nav layout based on user's exact sequence
+const navItems = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'about-us', label: 'About Us' },
+  { id: 'discover', label: 'Discover' },
+  { id: 'open-mics', label: 'Open Mics' },
+  { id: 'communities', label: 'Communities' },
+  { id: 'song-feed', label: 'Song Feed' },
+  { id: 'beat-market', label: 'Beat Market' },
+  { id: 'my-studio', label: 'My Studio' },
+];
 
 export function DashboardPage() {
   return (
-    <SidebarProvider>
-      <Sidebar side="left" variant="sidebar" className="border-r border-white/10 bg-black dark shadow-xl z-50">
-        <SidebarContent className="bg-black">
-          <SidebarGroup className="pt-6">
-            <div className="flex items-center gap-3 px-4 mb-6">
-                <img 
-                    src="/cypherlogo 1.svg" 
-                    alt="CypherConnect Logo" 
-                    className="w-10 h-10 object-contain grayscale brightness-[5] contrast-[2]" 
-                />
-                <h2 className="text-white font-bold tracking-wider text-xl">CYPHER</h2>
-            </div>
-            
-            <SidebarGroupLabel className="text-white/40 mb-2 px-4 text-xs font-semibold uppercase tracking-widest">Platform</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu className="px-2">
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title} className="hover:bg-white/10 text-white/80 hover:text-white transition-all duration-200 group py-5 rounded-xl">
-                      <a href={item.url}>
-                        <item.icon className="h-5 w-5 mr-1 group-hover:text-white transition-colors" />
-                        <span className="text-[15px] font-medium tracking-wide">{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
+    <div className="min-h-screen bg-black text-white relative flex flex-col items-center overflow-x-hidden pb-32 selection:bg-white/20">
+      
+      {/* Top Header / Logo Bar */}
+      <div className="w-full mx-auto px-6 md:px-12 py-4 flex justify-between items-center z-10 sticky top-0 bg-transparent flex-wrap gap-4">
+         <div className="flex items-center">
+             <img 
+                 src="/cypherlogo 1.svg" 
+                 alt="Cypher Connect" 
+                 className="w-8 h-8 md:w-10 md:h-10 object-contain grayscale brightness-[5] contrast-[2] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" 
+             />
+         </div>
+         
+         <div className="hidden lg:flex items-center justify-center flex-1">
+            <LimelightNav items={navItems} />
+         </div>
 
-        <SidebarFooter className="bg-black/50 border-t border-white/5 p-4">
-          <SidebarGroup className="p-0">
-            <SidebarMenuButton className="w-full justify-between gap-3 h-auto py-3 px-3 hover:bg-white/10 text-white rounded-xl transition-all border border-transparent hover:border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="bg-white/10 p-2 rounded-full border border-white/10">
-                  <User className="h-5 w-5" />
-                </div>
-                <div className="flex flex-col items-start leading-tight">
-                  <span className="text-[14px] font-semibold tracking-wide">Underground Artist</span>
-                  <span className="text-[11px] text-white/50 tracking-wider uppercase font-medium mt-0.5">Pro Member</span>
-                </div>
+         <div className="flex items-center gap-4">
+             <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all">
+                <Mic2 className="w-5 h-5 text-white/80" />
+             </div>
+         </div>
+      </div>
+      
+      {/* Mainstage Area */}
+      <main className="w-full max-w-[1400px] mx-auto p-6 md:px-12 pt-10">
+        <header className="mb-14">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tighter">The Cypher Mainstage</h1>
+          <p className="text-white/50 mt-4 text-lg md:text-xl tracking-wide font-medium">Connect, collaborate, and define the sound of the streets.</p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {/* CypherConnect Platform Feature Snippets */}
+          <div className="p-8 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.08] to-transparent backdrop-blur-lg hover:border-white/30 transition-all duration-300 group cursor-pointer relative overflow-hidden shadow-2xl">
+              <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 scale-150 rotate-12">
+                  <Music className="w-48 h-48" />
               </div>
-              <ChevronsUpDown className="h-4 w-4 text-white/40" />
-            </SidebarMenuButton>
-          </SidebarGroup>
-        </SidebarFooter>
-      </Sidebar>
-
-      <main className="flex-1 min-w-0 bg-black text-white min-h-screen border-l border-white/5 relative overflow-x-hidden">
-        {/* Mobile Sidebar Trigger - Hidden on larger screens via CSS applied in sidebar trigger automatically but we float it here */}
-        <div className="md:hidden p-4 border-b border-white/10 flex items-center justify-between sticky top-0 bg-black/80 backdrop-blur-md z-40">
-           <SidebarTrigger className="h-10 w-10 bg-white/5 border border-white/10 text-white rounded-full flex items-center justify-center p-0" />
-           <img src="/cypherlogo 1.svg" alt="Cypher" className="w-8 h-8 object-contain grayscale brightness-[5]" />
-           <div className="w-10"></div> {/* Spacer for centering */}
-        </div>
-        
-        <div className="max-w-[1400px] mx-auto p-6 md:p-12">
-          <header className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">The Cypher Mainstage</h1>
-            <p className="text-white/50 mt-3 text-lg tracking-wide">Connect, collaborate, and define the sound of the streets.</p>
-          </header>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {/* CypherConnect Platform Feature Snippets */}
-            <div className="p-8 rounded-[1.5rem] border border-white/10 bg-white/[0.03] backdrop-blur-lg hover:border-white/20 transition-colors group cursor-pointer relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <Music className="w-24 h-24" />
-                </div>
-                <h3 className="font-bold text-xl flex items-center gap-3 text-white tracking-wide"><UploadCloud className="w-6 h-6 text-white/70"/> Fresh Drops</h3>
-                <p className="text-white/50 text-base mt-4 leading-relaxed">Listen to the latest lo-fi Ghazals and underground Sufi beats uploaded by community artists today.</p>
-            </div>
-            
-            <div className="p-8 rounded-[1.5rem] border border-white/10 bg-white/[0.03] backdrop-blur-lg hover:border-white/20 transition-colors group cursor-pointer relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <Users className="w-24 h-24" />
-                </div>
-                <h3 className="font-bold text-xl flex items-center gap-3 text-white tracking-wide"><Users className="w-6 h-6 text-white/70"/> Collab Radar</h3>
-                <p className="text-white/50 text-base mt-4 leading-relaxed">4 top-tier producers are actively seeking playback vocalists to collaborate on a new mainstream album.</p>
-            </div>
-            
-            <div className="p-8 rounded-[1.5rem] border border-white/10 bg-white/[0.03] backdrop-blur-lg hover:border-white/20 transition-colors group cursor-pointer relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <Mic2 className="w-24 h-24" />
-                </div>
-                <h3 className="font-bold text-xl flex items-center gap-3 text-white tracking-wide"><Mic2 className="w-6 h-6 text-white/70"/> Open Mics</h3>
-                <p className="text-white/50 text-base mt-4 leading-relaxed">Local Cypher session kicking off in Bandra this weekend. Reserve your performing slot to showcase your flow.</p>
-            </div>
+              <h3 className="font-bold text-2xl flex items-center gap-3 text-white tracking-tight"><UploadCloud className="w-6 h-6 text-white"/> Fresh Drops</h3>
+              <p className="text-white/60 text-base mt-4 leading-relaxed font-medium">Listen to the latest lo-fi Ghazals and underground Sufi beats uploaded by community artists today.</p>
           </div>
+          
+          <div className="p-8 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.08] to-transparent backdrop-blur-lg hover:border-white/30 transition-all duration-300 group cursor-pointer relative overflow-hidden shadow-2xl">
+              <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 scale-150 -rotate-12">
+                  <Users className="w-48 h-48" />
+              </div>
+              <h3 className="font-bold text-2xl flex items-center gap-3 text-white tracking-tight"><Users className="w-6 h-6 text-white"/> Collab Radar</h3>
+              <p className="text-white/60 text-base mt-4 leading-relaxed font-medium">4 top-tier producers are actively seeking playback vocalists to collaborate on a new mainstream album.</p>
+          </div>
+          
+          <div className="p-8 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.08] to-transparent backdrop-blur-lg hover:border-white/30 transition-all duration-300 group cursor-pointer relative overflow-hidden shadow-2xl">
+               <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 scale-150 rotate-45">
+                  <Mic2 className="w-48 h-48" />
+              </div>
+              <h3 className="font-bold text-2xl flex items-center gap-3 text-white tracking-tight"><Mic2 className="w-6 h-6 text-white"/> Open Mics</h3>
+              <p className="text-white/60 text-base mt-4 leading-relaxed font-medium">Local Cypher session kicking off in Bandra this weekend. Reserve your performing slot to showcase your flow.</p>
+          </div>
+        </div>
 
-          {/* Trending Feed Placeholder */}
-          <div className="rounded-[1.5rem] border border-white/10 bg-black overflow-hidden relative">
-            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
-                <h3 className="text-lg font-bold tracking-wide flex items-center gap-2"><TrendingUp className="w-5 h-5"/> Trending in Community</h3>
-                <button className="text-sm font-medium text-white/50 hover:text-white transition-colors">View All</button>
-            </div>
-            
-            <div className="divide-y divide-white/5">
-                {[1, 2, 3].map((item) => (
-                    <div key={item} className="p-6 flex items-center gap-4 hover:bg-white/[0.03] transition-colors cursor-pointer">
-                        <div className="w-12 h-12 bg-white/10 rounded-full flex-shrink-0" />
-                        <div className="flex-1">
-                            <h4 className="font-bold">Project File: 'Midnight Sufi Elements'</h4>
-                            <p className="text-white/50 text-sm mt-1">Uploaded by ProducerXYZ • 2.4k downloads</p>
-                        </div>
-                        <div className="hidden sm:flex text-sm font-semibold px-4 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all">
-                            Listen
-                        </div>
-                    </div>
-                ))}
-            </div>
+        {/* Trending Feed Placeholder */}
+        <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.02] overflow-hidden relative shadow-2xl backdrop-blur-lg">
+          <div className="p-8 border-b border-white/10 flex items-center justify-between">
+              <h3 className="text-xl font-bold tracking-tight flex items-center gap-2"><TrendingUp className="w-5 h-5 text-white/50"/> Trending in Community</h3>
+              <button className="text-sm font-semibold text-white hover:text-white/70 tracking-wide transition-colors uppercase">View All</button>
+          </div>
+          
+          <div className="divide-y divide-white/5">
+              {[1, 2, 3].map((item) => (
+                  <div key={item} className="p-6 md:p-8 flex items-center gap-5 hover:bg-white/[0.03] transition-colors cursor-pointer group">
+                      <div className="w-14 h-14 bg-white/10 rounded-full flex-shrink-0 group-hover:scale-105 transition-transform" />
+                      <div className="flex-1">
+                          <h4 className="font-bold text-lg tracking-wide text-white/90 group-hover:text-white transition-colors">Project File: 'Midnight Sufi Elements'</h4>
+                          <p className="text-white/50 text-sm mt-1 font-medium">Uploaded by ProducerXYZ • 2.4k downloads</p>
+                      </div>
+                      <div className="hidden sm:flex text-sm font-bold tracking-wide px-6 py-3 border border-white/20 rounded-full hover:bg-white hover:text-black hover:scale-105 transition-all">
+                          Listen
+                      </div>
+                  </div>
+              ))}
           </div>
         </div>
       </main>
-    </SidebarProvider>
+    </div>
   )
 }
