@@ -9,8 +9,8 @@ export function AboutUsPage() {
   const navItems = [
     { id: 'overview', label: 'Overview', onClick: () => navigate('/dashboard') },
     { id: 'about-us', label: 'About Us', onClick: () => navigate('/about') },
-    { id: 'discover', label: 'Discover' },
-    { id: 'open-mics', label: 'Open Mics' },
+    { id: 'discover', label: 'Discover', onClick: () => navigate('/discover') },
+    { id: 'open-mics', label: 'Open Mics', onClick: () => navigate('/open-mics') },
     { id: 'communities', label: 'Communities' },
     { id: 'song-feed', label: 'Song Feed' },
     { id: 'beat-market', label: 'Beat Market' },
@@ -21,22 +21,22 @@ export function AboutUsPage() {
     <div className="min-h-screen w-full bg-black text-white relative selection:bg-white/20 flex flex-col">
       
       {/* Top Header / Logo Bar */}
-      <div className="w-full mx-auto px-6 md:px-12 py-4 flex justify-between items-center z-50 fixed top-0 bg-transparent flex-wrap gap-4">
+      <div className="w-full mx-auto px-6 md:px-12 py-5 flex justify-between items-center z-50 fixed top-0 bg-black/20 backdrop-blur-xl border-b border-white/5 flex-wrap gap-4 transition-all duration-300">
          <div className="flex items-center">
              <img 
                  src="/cypherlogo 1.svg" 
                  alt="Cypher Connect" 
-                 className="w-8 h-8 md:w-10 md:h-10 object-contain grayscale brightness-[5] contrast-[2] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" 
+                 className="w-12 h-12 md:w-14 md:h-14 object-contain grayscale brightness-[5] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] transition-all cursor-pointer hover:scale-105" 
              />
          </div>
          
          <div className="hidden lg:flex items-center justify-center flex-1">
-            <LimelightNav items={navItems} />
+            <LimelightNav items={navItems} defaultActiveIndex={1} />
          </div>
 
          <div className="flex items-center gap-4">
-             <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md">
-                <Mic2 className="w-5 h-5 text-white/80" />
+             <div className="w-11 h-11 rounded-full border border-white/10 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md group">
+                <Mic2 className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
              </div>
          </div>
       </div>

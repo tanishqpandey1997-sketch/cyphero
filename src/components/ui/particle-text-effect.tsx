@@ -343,15 +343,14 @@ export function CypherParticleText({ words = DEFAULT_WORDS }: ParticleTextEffect
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto py-20 px-4 group">
-      <div className="relative w-full rounded-2xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/5 shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+    <div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-4 group">
+      <div className="relative w-full overflow-hidden">
         <canvas
           ref={canvasRef}
           className="w-full aspect-[2/1] object-contain"
         />
-        <div className="absolute inset-0 pointer-events-none ring-1 ring-white/10 group-hover:ring-white/20 transition-all duration-500 rounded-2xl"></div>
       </div>
-      <div className="mt-8 text-center space-y-2">
+      <div className="mt-4 text-center space-y-2">
          <p className="text-zinc-500 text-xs uppercase tracking-[0.3em] font-bold">Interact with the core</p>
          <p className="text-zinc-600 text-[10px] uppercase tracking-widest leading-loose">
             Right-click to fragment the particles • Auto-evolving sequence
