@@ -1,11 +1,9 @@
 import { LimelightNav } from "@/components/ui/limelight-nav"
 import { 
-  UploadCloud,
-  Users,
-  Mic2,
-  TrendingUp,
-  Music
+  Mic2
 } from "lucide-react"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 // Minimal clean labels for the Limelight nav layout based on user's exact sequence
 const navItems = [
@@ -19,9 +17,31 @@ const navItems = [
   { id: 'my-studio', label: 'My Studio' },
 ];
 
+const slideData = [
+  { left: "CLASSIC", right: "SILENCE", center: "GHAZALSOUL" },
+  { left: "URBAN", right: "RHYTHM", center: "STREETFLOW" },
+  { left: "SPIRITUAL", right: "VIBE", center: "SOUL CHANT" },
+  { left: "MODERN", right: "FEEL", center: "SYNTHWAVE" }
+];
+
 export function DashboardPage() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <div className="min-h-screen bg-black text-white relative flex flex-col items-center overflow-x-hidden pb-32 selection:bg-white/20">
+    <div className="h-screen w-full bg-black text-white relative flex flex-col items-center overflow-x-hidden overflow-y-auto pb-32 selection:bg-white/20">
+      
+      {/* Background Video Overlay to match the hood reference */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black z-10"></div>
+        <video 
+            src="/overview1.mov" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-full object-cover opacity-100"
+        />
+      </div>
       
       {/* Top Header / Logo Bar */}
       <div className="w-full mx-auto px-6 md:px-12 py-4 flex justify-between items-center z-10 sticky top-0 bg-transparent flex-wrap gap-4">
@@ -38,69 +58,120 @@ export function DashboardPage() {
          </div>
 
          <div className="flex items-center gap-4">
-             <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all">
+             <div className="w-10 h-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md">
                 <Mic2 className="w-5 h-5 text-white/80" />
              </div>
          </div>
       </div>
       
-      {/* Mainstage Area */}
-      <main className="w-full max-w-[1400px] mx-auto p-6 md:px-12 pt-10">
-        <header className="mb-14">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tighter">The Cypher Mainstage</h1>
-          <p className="text-white/50 mt-4 text-lg md:text-xl tracking-wide font-medium">Connect, collaborate, and define the sound of the streets.</p>
-        </header>
+      {/* Hero / Overview Mainstage */}
+      <main id="dashboard-main" className="flex-1 w-full relative z-10 flex flex-col">
+          <div className="relative h-[85vh] w-full px-4">
+            
+            {/* Top Text - CYPHER CONNECT */}
+            <div className="absolute top-[15%] left-1/2 -translate-x-1/2 text-center w-full z-10 flex flex-col items-center">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-white tracking-widest mb-3 drop-shadow-2xl">
+                CYPHER CONNECT
+              </h1>
+              <p className="text-white/60 tracking-[0.3em] font-medium uppercase text-xs md:text-sm">
+                Explore the Spectrum
+              </p>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {/* CypherConnect Platform Feature Snippets */}
-          <div className="p-8 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.08] to-transparent backdrop-blur-lg hover:border-white/30 transition-all duration-300 group cursor-pointer relative overflow-hidden shadow-2xl">
-              <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 scale-150 rotate-12">
-                  <Music className="w-48 h-48" />
-              </div>
-              <h3 className="font-bold text-2xl flex items-center gap-3 text-white tracking-tight"><UploadCloud className="w-6 h-6 text-white"/> Fresh Drops</h3>
-              <p className="text-white/60 text-base mt-4 leading-relaxed font-medium">Listen to the latest lo-fi Ghazals and underground Sufi beats uploaded by community artists today.</p>
-          </div>
-          
-          <div className="p-8 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.08] to-transparent backdrop-blur-lg hover:border-white/30 transition-all duration-300 group cursor-pointer relative overflow-hidden shadow-2xl">
-              <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 scale-150 -rotate-12">
-                  <Users className="w-48 h-48" />
-              </div>
-              <h3 className="font-bold text-2xl flex items-center gap-3 text-white tracking-tight"><Users className="w-6 h-6 text-white"/> Collab Radar</h3>
-              <p className="text-white/60 text-base mt-4 leading-relaxed font-medium">4 top-tier producers are actively seeking playback vocalists to collaborate on a new mainstream album.</p>
-          </div>
-          
-          <div className="p-8 rounded-[1.5rem] border border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.08] to-transparent backdrop-blur-lg hover:border-white/30 transition-all duration-300 group cursor-pointer relative overflow-hidden shadow-2xl">
-               <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 scale-150 rotate-45">
-                  <Mic2 className="w-48 h-48" />
-              </div>
-              <h3 className="font-bold text-2xl flex items-center gap-3 text-white tracking-tight"><Mic2 className="w-6 h-6 text-white"/> Open Mics</h3>
-              <p className="text-white/60 text-base mt-4 leading-relaxed font-medium">Local Cypher session kicking off in Bandra this weekend. Reserve your performing slot to showcase your flow.</p>
-          </div>
-        </div>
+            {/* Dynamic Genre Center Text */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center pointer-events-none z-10 overflow-hidden h-[20vw] items-center">
+              <AnimatePresence mode="popLayout">
+                 <motion.span 
+                    key={activeIndex}
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -100, opacity: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="text-[12vw] md:text-[8vw] lg:text-[9vw] font-black text-white whitespace-nowrap leading-none select-none drop-shadow-[0_10px_35px_rgba(0,0,0,0.5)] absolute"
+                 >
+                    {slideData[activeIndex].center}
+                 </motion.span>
+              </AnimatePresence>
+            </div>
+            
+            {/* Left Floating Tags (Scroll / Click controlled) */}
+            <div className="absolute left-6 md:left-12 lg:left-24 top-1/2 hidden md:flex flex-col z-20 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                 style={{ transform: `translateY(calc(-50% - ${activeIndex * 40}px))` }}>
+                {slideData.map((item, idx) => (
+                   <div 
+                      key={`left-${idx}`} 
+                      onClick={() => setActiveIndex(idx)}
+                      className={`h-[40px] flex items-center gap-3 cursor-pointer transition-all duration-500 font-bold tracking-[0.1em] text-lg lg:text-2xl ${
+                          activeIndex === idx ? "text-white scale-100" : "text-white/40 hover:text-white/60 scale-95 origin-left"
+                      }`}
+                   >
+                      {activeIndex === idx && <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] shrink-0"></span>} 
+                      {item.left}
+                   </div>
+                ))}
+            </div>
 
-        {/* Trending Feed Placeholder */}
-        <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.02] overflow-hidden relative shadow-2xl backdrop-blur-lg">
-          <div className="p-8 border-b border-white/10 flex items-center justify-between">
-              <h3 className="text-xl font-bold tracking-tight flex items-center gap-2"><TrendingUp className="w-5 h-5 text-white/50"/> Trending in Community</h3>
-              <button className="text-sm font-semibold text-white hover:text-white/70 tracking-wide transition-colors uppercase">View All</button>
+            {/* Right Floating Tags (Scroll / Click controlled) */}
+            <div className="absolute right-6 md:right-12 lg:right-24 top-1/2 hidden md:flex flex-col text-right items-end z-20 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                 style={{ transform: `translateY(calc(-50% - ${activeIndex * 40}px))` }}>
+                {slideData.map((item, idx) => (
+                   <div 
+                      key={`right-${idx}`} 
+                      onClick={() => setActiveIndex(idx)}
+                      className={`h-[40px] flex items-center justify-end gap-3 cursor-pointer transition-all duration-500 font-bold tracking-[0.1em] text-lg lg:text-2xl ${
+                          activeIndex === idx ? "text-white scale-100" : "text-white/40 hover:text-white/60 scale-95 origin-right"
+                      }`}
+                   >
+                      {item.right}
+                      {activeIndex === idx && <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] shrink-0"></span>} 
+                   </div>
+                ))}
+            </div>
+
           </div>
-          
-          <div className="divide-y divide-white/5">
-              {[1, 2, 3].map((item) => (
-                  <div key={item} className="p-6 md:p-8 flex items-center gap-5 hover:bg-white/[0.03] transition-colors cursor-pointer group">
-                      <div className="w-14 h-14 bg-white/10 rounded-full flex-shrink-0 group-hover:scale-105 transition-transform" />
-                      <div className="flex-1">
-                          <h4 className="font-bold text-lg tracking-wide text-white/90 group-hover:text-white transition-colors">Project File: 'Midnight Sufi Elements'</h4>
-                          <p className="text-white/50 text-sm mt-1 font-medium">Uploaded by ProducerXYZ • 2.4k downloads</p>
-                      </div>
-                      <div className="hidden sm:flex text-sm font-bold tracking-wide px-6 py-3 border border-white/20 rounded-full hover:bg-white hover:text-black hover:scale-105 transition-all">
-                          Listen
-                      </div>
-                  </div>
-              ))}
-          </div>
-        </div>
       </main>
+
+      {/* Footer extracted fully */}
+      <footer className="mt-auto pt-24 pb-12 px-8 border-t border-white/5 bg-black/40 backdrop-blur-lg w-full z-10">
+        <div className="flex flex-col items-center space-y-12 max-w-5xl mx-auto">
+          {/* Branding & Info */}
+          <div className="text-center">
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-5 tracking-tight flex items-center justify-center gap-3">
+               <img src="/cypherlogo 1.svg" alt="Cypher Logo" className="w-8 h-8 grayscale brightness-[5]" />
+               CypherConnect
+            </h3>
+            <p className="text-zinc-400 max-w-lg mx-auto leading-relaxed text-sm md:text-base font-medium">
+              Built for the voices that don't get heard. Uniting artists, fans, and creators into one diverse, culture-driven ecosystem.
+            </p>
+          </div>
+
+          {/* Social Media Icons */}
+          <div className="flex space-x-6 md:space-x-8">
+            <a href="#" className="text-zinc-500 hover:text-white transition-all duration-300 p-2 hover:bg-white/10 rounded-full font-semibold uppercase tracking-wider text-sm">
+              Instagram
+            </a>
+            <a href="#" className="text-zinc-500 hover:text-white transition-all duration-300 p-2 hover:bg-white/10 rounded-full font-semibold uppercase tracking-wider text-sm">
+              Twitter
+            </a>
+            <a href="#" className="text-zinc-500 hover:text-white transition-all duration-300 p-2 hover:bg-white/10 rounded-full font-semibold uppercase tracking-wider text-sm">
+              YouTube
+            </a>
+          </div>
+
+          {/* Footer Navigation */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 text-xs md:text-sm text-zinc-500 font-bold tracking-widest uppercase">
+            <a href="#" className="hover:text-white duration-300 transition-all">Community</a>
+            <a href="#" className="hover:text-white duration-300 transition-all">Discover Artists</a>
+            <a href="#" className="hover:text-white duration-300 transition-all">About Us</a>
+            <a href="#" className="hover:text-white duration-300 transition-all">Contact</a>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-zinc-600 text-[10px] md:text-xs tracking-[0.2em] font-medium uppercase mt-8 pt-8 border-t border-white/5 w-full text-center">
+            © 2026 CypherConnect. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
