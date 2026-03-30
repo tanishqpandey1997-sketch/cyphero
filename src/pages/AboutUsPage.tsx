@@ -1,12 +1,9 @@
 import { LimelightNav } from "@/components/ui/limelight-nav"
-import { 
-  Mic2
-} from "lucide-react"
-import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero"
-
+import { Mic2 } from "lucide-react"
+import { CypherParticleText } from "@/components/ui/particle-text-effect"
 import { useNavigate } from "react-router-dom"
 
-export function DashboardPage() {
+export function AboutUsPage() {
   const navigate = useNavigate();
 
   const navItems = [
@@ -19,8 +16,9 @@ export function DashboardPage() {
     { id: 'beat-market', label: 'Beat Market' },
     { id: 'my-studio', label: 'My Studio' },
   ];
+
   return (
-    <div className="min-h-screen w-full bg-black text-white relative selection:bg-white/20">
+    <div className="min-h-screen w-full bg-black text-white relative selection:bg-white/20 flex flex-col">
       
       {/* Top Header / Logo Bar */}
       <div className="w-full mx-auto px-6 md:px-12 py-4 flex justify-between items-center z-50 fixed top-0 bg-transparent flex-wrap gap-4">
@@ -43,39 +41,37 @@ export function DashboardPage() {
          </div>
       </div>
       
-      <ScrollExpandMedia
-        mediaType="video"
-        mediaSrc="/overview1.mov"
-        bgImageSrc="/over.png"
-        title="CYPHER CONNECT"
-        date="EXPLORE SPECTRUM"
-        scrollToExpand="Scroll to Expand"
-        textBlend
-      >
-        <div className="max-w-4xl mx-auto space-y-12">
-          <div className="text-center space-y-6">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-              The Evolution of Sound
-            </h2>
-            <p className="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-              Welcome to the underground rhythm. CypherConnect is more than a platform; it's a movement where every voice finds its frequency.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-12">
-            <div className="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 backdrop-blur-sm">
-              <h3 className="text-2xl font-bold mb-4">Discover Talent</h3>
-              <p className="text-zinc-400">Find artists pushing boundaries and breaking genres in real-time.</p>
-            </div>
-            <div className="p-8 rounded-2xl bg-zinc-900/50 border border-white/5 backdrop-blur-sm">
-              <h3 className="text-2xl font-bold mb-4">Your Studio</h3>
-              <p className="text-zinc-400">A professional suite of tools designed for the modern creator.</p>
-            </div>
-          </div>
+      <main className="flex-1 flex flex-col items-center justify-center pt-32">
+        <div className="text-center space-y-4 mb-8">
+            <h1 className="text-4xl md:text-6xl font-black tracking-widest uppercase">About Us</h1>
+            <p className="text-zinc-500 tracking-[0.4em] text-xs font-bold uppercase">The DNA of Cypher Connect</p>
         </div>
-      </ScrollExpandMedia>
 
-      {/* Footer extracted fully */}
+        <CypherParticleText words={["IDENTITY", "CULTURE", "BEATS", "FUTURE"]} />
+
+        <div className="max-w-3xl mx-auto px-6 text-center space-y-8 pb-32">
+             <p className="text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed">
+                Cypher Connect is an experimental platform built for the voices that refuse to be silent. 
+                We bridge the gap between raw talent and the global stage.
+             </p>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12">
+                <div className="space-y-2">
+                    <h4 className="text-white font-bold tracking-widest uppercase text-sm">Vision</h4>
+                    <p className="text-zinc-500 text-xs leading-relaxed">Redefining the digital music landscape through community-first ecosystems.</p>
+                </div>
+                <div className="space-y-2">
+                    <h4 className="text-white font-bold tracking-widest uppercase text-sm">Mission</h4>
+                    <p className="text-zinc-500 text-xs leading-relaxed">Empowering independent artists with professional studio-grade tools.</p>
+                </div>
+                <div className="space-y-2">
+                    <h4 className="text-white font-bold tracking-widest uppercase text-sm">Culture</h4>
+                    <p className="text-zinc-500 text-xs leading-relaxed">Rooted in the underground, built for the future of global sound.</p>
+                </div>
+             </div>
+        </div>
+      </main>
+
+      {/* Footer (Same as Dashboard) */}
       <footer className="mt-auto pt-24 pb-12 px-8 border-t border-white/5 bg-black/40 backdrop-blur-lg w-full z-10">
         <div className="flex flex-col items-center space-y-12 max-w-5xl mx-auto">
           {/* Branding & Info */}
