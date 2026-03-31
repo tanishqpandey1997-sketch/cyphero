@@ -1,74 +1,66 @@
-import { LimelightNav } from "@/components/ui/limelight-nav"
-import { Mic2 } from "lucide-react"
+import { SharedHeader } from "@/components/ui/shared-header"
 import { CypherParticleText } from "@/components/ui/particle-text-effect"
-import { useNavigate } from "react-router-dom"
 
 export function AboutUsPage() {
-  const navigate = useNavigate();
 
-  const navItems = [
-    { id: 'overview', label: 'Overview', onClick: () => navigate('/dashboard') },
-    { id: 'about-us', label: 'About Us', onClick: () => navigate('/about') },
-    { id: 'discover', label: 'Discover', onClick: () => navigate('/discover') },
-    { id: 'open-mics', label: 'Open Mics', onClick: () => navigate('/open-mics') },
-    { id: 'communities', label: 'Communities' },
-    { id: 'song-feed', label: 'Song Feed' },
-    { id: 'beat-market', label: 'Beat Market' },
-    { id: 'my-studio', label: 'My Studio' },
-  ];
 
   return (
     <div className="min-h-screen w-full bg-black text-white relative selection:bg-white/20 flex flex-col">
       
       {/* Top Header / Logo Bar */}
-      <div className="w-full mx-auto px-6 md:px-12 py-5 flex justify-between items-center z-50 fixed top-0 bg-black/20 backdrop-blur-xl border-b border-white/5 flex-wrap gap-4 transition-all duration-300">
-         <div className="flex items-center">
-             <img 
-                 src="/cypherlogo 1.svg" 
-                 alt="Cypher Connect" 
-                 className="w-12 h-12 md:w-14 md:h-14 object-contain grayscale brightness-[5] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] transition-all cursor-pointer hover:scale-105" 
-             />
-         </div>
-         
-         <div className="hidden lg:flex items-center justify-center flex-1">
-            <LimelightNav items={navItems} defaultActiveIndex={1} />
-         </div>
-
-         <div className="flex items-center gap-4">
-             <div className="w-11 h-11 rounded-full border border-white/10 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md group">
-                <Mic2 className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
-             </div>
-         </div>
-      </div>
+      <SharedHeader activeIndex={1} />
       
-      <main className="flex-1 flex flex-col items-center justify-center pt-32">
-        <div className="text-center space-y-4 mb-8">
-            <h1 className="text-4xl md:text-6xl font-black tracking-widest uppercase">About Us</h1>
-            <p className="text-zinc-500 tracking-[0.4em] text-xs font-bold uppercase">The DNA of Cypher Connect</p>
-        </div>
+      <main className="flex-1 w-full relative">
+        {/* Full-Screen Hero Section */}
+        <section className="h-screen w-full relative flex flex-col items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 z-0">
+             <CypherParticleText words={["THE SPECTRUM", "CYPHER", "IDENTITY", "FUTURE"]} />
+          </div>
+          
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+             <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent"></div>
+          </div>
+        </section>
 
-        <CypherParticleText words={["IDENTITY", "CULTURE", "BEATS", "FUTURE"]} />
-
-        <div className="max-w-3xl mx-auto px-6 text-center space-y-8 pb-32">
-             <p className="text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed">
-                Cypher Connect is an experimental platform built for the voices that refuse to be silent. 
-                We bridge the gap between raw talent and the global stage.
-             </p>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12">
-                <div className="space-y-2">
-                    <h4 className="text-white font-bold tracking-widest uppercase text-sm">Vision</h4>
-                    <p className="text-zinc-500 text-xs leading-relaxed">Redefining the digital music landscape through community-first ecosystems.</p>
+        {/* Immersive Narrative Sections */}
+        <section className="w-full bg-black/60 backdrop-blur-3xl border-t border-white/5 relative z-20 py-32">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+             <div className="space-y-8">
+                <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight leading-tight">
+                   Breaking the <span className="text-zinc-600 italic">Frame</span>
+                </h2>
+                <div className="h-1 w-20 bg-white"></div>
+                <p className="text-xl md:text-2xl font-medium text-zinc-300 leading-relaxed uppercase tracking-wide">
+                   Cypher Connect is an experimental platform built for the voices that refuse to be silent. 
+                   We bridge the gap between raw talent and the global stage.
+                </p>
+             </div>
+             
+             <div className="grid grid-cols-1 gap-12">
+                <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all group">
+                   <h4 className="text-white font-bold tracking-widest uppercase text-xs mb-4 flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-white group-hover:scale-150 transition-transform"></span>
+                      Vision
+                   </h4>
+                   <p className="text-zinc-500 text-sm leading-relaxed uppercase tracking-wider">Redefining the digital music landscape through community-first ecosystems.</p>
                 </div>
-                <div className="space-y-2">
-                    <h4 className="text-white font-bold tracking-widest uppercase text-sm">Mission</h4>
-                    <p className="text-zinc-500 text-xs leading-relaxed">Empowering independent artists with professional studio-grade tools.</p>
+                <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all group">
+                   <h4 className="text-white font-bold tracking-widest uppercase text-xs mb-4 flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-white group-hover:scale-150 transition-transform"></span>
+                      Mission
+                   </h4>
+                   <p className="text-zinc-500 text-sm leading-relaxed uppercase tracking-wider">Empowering independent artists with professional studio-grade tools.</p>
                 </div>
-                <div className="space-y-2">
-                    <h4 className="text-white font-bold tracking-widest uppercase text-sm">Culture</h4>
-                    <p className="text-zinc-500 text-xs leading-relaxed">Rooted in the underground, built for the future of global sound.</p>
+                <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all group">
+                   <h4 className="text-white font-bold tracking-widest uppercase text-xs mb-4 flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-white group-hover:scale-150 transition-transform"></span>
+                      Culture
+                   </h4>
+                   <p className="text-zinc-500 text-sm leading-relaxed uppercase tracking-wider">Rooted in the underground, built for the future of global sound.</p>
                 </div>
              </div>
-        </div>
+          </div>
+        </section>
       </main>
 
       {/* Footer (Same as Dashboard) */}

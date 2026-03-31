@@ -171,8 +171,9 @@ export function CypherParticleText({ words = DEFAULT_WORDS }: ParticleTextEffect
     offscreenCanvas.height = canvas.height
     const offscreenCtx = offscreenCanvas.getContext("2d")!
 
+    const fontSize = Math.min(canvas.width / 8, 140)
     offscreenCtx.fillStyle = "white"
-    offscreenCtx.font = "bold 120px Outfit"
+    offscreenCtx.font = `bold ${fontSize}px Outfit`
     offscreenCtx.textAlign = "center"
     offscreenCtx.textBaseline = "middle"
     offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2)
@@ -297,8 +298,19 @@ export function CypherParticleText({ words = DEFAULT_WORDS }: ParticleTextEffect
     const canvas = canvasRef.current
     if (!canvas) return
 
-    canvas.width = 1000
-    canvas.height = 500
+    const updateSize = () => {
+      const parent = canvas.parentElement
+      if (!parent) return
+      
+      canvas.width = parent.clientWidth
+      canvas.height = parent.clientHeight
+      
+      // Re-render the current word on resize to maintain position
+      nextWord(words[wordIndexRef.current], canvas)
+    }
+
+    updateSize()
+    window.addEventListener('resize', updateSize)
 
     nextWord(words[0], canvas)
     animate()
@@ -335,6 +347,7 @@ export function CypherParticleText({ words = DEFAULT_WORDS }: ParticleTextEffect
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
+      window.removeEventListener('resize', updateSize)
       canvas.removeEventListener("mousedown", handleMouseDown)
       canvas.removeEventListener("mouseup", handleMouseUp)
       canvas.removeEventListener("mousemove", handleMouseMove)
@@ -343,18 +356,15 @@ export function CypherParticleText({ words = DEFAULT_WORDS }: ParticleTextEffect
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-4 group">
-      <div className="relative w-full overflow-hidden">
+    <div className="flex flex-col items-center justify-center w-full h-full group relative">
+      <div className="relative w-full h-full overflow-hidden">
         <canvas
           ref={canvasRef}
-          className="w-full aspect-[2/1] object-contain"
+          className="w-full h-full object-cover"
         />
       </div>
-      <div className="mt-4 text-center space-y-2">
-         <p className="text-zinc-500 text-xs uppercase tracking-[0.3em] font-bold">Interact with the core</p>
-         <p className="text-zinc-600 text-[10px] uppercase tracking-widest leading-loose">
-            Right-click to fragment the particles • Auto-evolving sequence
-         </p>
+      <div className="absolute bottom-10 left-0 right-0 text-center space-y-2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+         <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] font-medium">Interact with the core</p>
       </div>
     </div>
   )

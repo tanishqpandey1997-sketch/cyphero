@@ -6,6 +6,7 @@ import { AboutUsPage } from "@/pages/AboutUsPage";
 import { DiscoverPage } from "@/pages/DiscoverPage";
 import { OpenMicsPage } from "@/pages/OpenMicsPage";
 import { CommunitiesPage } from "@/pages/CommunitiesPage";
+import { ProfilePage } from "@/pages/ProfilePage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/open-mics" element={<OpenMicsPage />} />
           <Route path="/communities" element={<CommunitiesPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </main>
     </Router>

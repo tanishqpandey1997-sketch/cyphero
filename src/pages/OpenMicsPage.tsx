@@ -1,175 +1,110 @@
-import { LimelightNav } from "@/components/ui/limelight-nav"
 import { 
-  Users,
-  Mic2,
-  Flame,
+  Mic2, 
+  Users, 
+  MapPin, 
+  Clock, 
   Music,
-  Radio,
-  Clock,
+  Video, 
+  Star,
   Plus,
+  Play,
+  Heart,
+  MessageSquare,
+  Share2,
   ChevronUp,
   ChevronDown,
-  Calendar,
-  MapPin,
-  MoreHorizontal,
-  CheckCircle2,
-  Video
+  TrendingUp,
+  Radio,
+  Gamepad,
+  Search,
+  Filter,
+  CheckCircle2
 } from "lucide-react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
+import { SharedHeader } from "@/components/ui/shared-header"
 
 // --- Types ---
 
-interface OpenMicSession {
+interface Session {
   id: string;
   title: string;
   host: string;
-  hostAvatar: string;
-  coverImage: string;
-  status: 'live' | 'upcoming' | 'completed';
   genre: string;
+  status: 'live' | 'upcoming';
   viewers?: number;
   date?: string;
   time?: string;
-  location?: string; // Virtual or Physical
+  location: string;
+  coverImage: string;
 }
 
-// --- Mock Data ---
-
-const MOCK_SESSIONS: OpenMicSession[] = [
+const MOCK_SESSIONS: Session[] = [
   {
-    id: '1',
-    title: 'THE UNDERGROUND CYPHER #42',
-    host: 'ZEPHYR',
-    hostAvatar: 'https://picsum.photos/seed/zephyr/100/100',
-    coverImage: 'https://images.unsplash.com/photo-1514525253361-bee8a187c473?q=80&w=2864&auto=format&fit=crop',
+    id: "s1",
+    title: "Late Night Jazz Fusion & Improvisation",
+    host: "Marcus Keys",
+    genre: "Jazz Fusion",
     status: 'live',
-    genre: 'HARDCORE RAP',
     viewers: 1240,
-    location: 'VIRTUAL STAGE 1'
+    location: "Virtual Stage 3",
+    coverImage: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2940&auto=format&fit=crop"
   },
   {
-    id: '2',
-    title: 'SUFI NIGHTS: OPEN SOUL',
-    host: 'ALIF',
-    hostAvatar: 'https://picsum.photos/seed/alif/100/100',
-    coverImage: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2940&auto=format&fit=crop',
+    id: "s2",
+    title: "Underground Drill Beat Cook-up 🎹",
+    host: "D-Vibe",
+    genre: "Hip-Hop / Drill",
     status: 'live',
-    genre: 'SUFI/FUSION',
     viewers: 850,
-    location: 'VIRTUAL STAGE 3'
+    location: "Studio-X Live",
+    coverImage: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2940&auto=format&fit=crop"
   },
   {
-    id: '3',
-    title: 'GAZAL & CHAI (VIRTUAL)',
-    host: 'MEER',
-    hostAvatar: 'https://picsum.photos/seed/meer/100/100',
-    coverImage: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2940&auto=format&fit=crop',
+    id: "s3",
+    title: "Vocals & Loops: Experimental Pop",
+    host: "Sarah Soul",
+    genre: "Experimental Pop",
     status: 'upcoming',
-    genre: 'GAZALS',
-    date: 'MAR 31',
-    time: '09:00 PM',
-    location: 'ONLINE EVENT'
-  },
-  {
-    id: '4',
-    title: 'BEATBOX BATTLE: SEMIS',
-    host: 'B-BASS',
-    hostAvatar: 'https://picsum.photos/seed/bbass/100/100',
-    coverImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2940&auto=format&fit=crop',
-    status: 'upcoming',
-    genre: 'BEATBOXING',
-    date: 'APR 02',
-    time: '10:00 PM',
-    location: 'BLUE ROOM'
+    date: "Oct 12",
+    time: "8:00 PM",
+    location: "The Cloud Lounge",
+    coverImage: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=2940&auto=format&fit=crop"
   }
 ];
 
 const CATEGORIES = [
-  { id: 'all', label: 'All Sessions', icon: Users },
-  { id: 'live', label: 'Live Now', icon: Flame },
-  { id: 'rap', label: 'Rap/Cyphers', icon: Mic2 },
-  { id: 'sufi', label: 'Sufi Soul', icon: Radio },
-  { id: 'gazals', label: 'Gazals', icon: Music },
-  { id: 'upcoming', label: 'Upcoming', icon: Calendar },
+  { id: 'all', label: 'All Sessions', icon: Radio },
+  { id: 'music', label: 'Music Only', icon: Music },
+  { id: 'creative', label: 'Creative Chat', icon: MessageSquare },
+  { id: 'gaming', label: 'Gaming / Music', icon: Gamepad },
+  { id: 'trending', label: 'Trending', icon: TrendingUp },
 ];
 
 export function OpenMicsPage() {
-  const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeCategory, setActiveCategory] = useState("all");
   const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
   const currentSession = MOCK_SESSIONS[currentSessionIndex];
-  
-  const lastScrollTime = useRef(0);
-
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      const now = Date.now();
-      if (now - lastScrollTime.current < 1000) return;
-
-      if (Math.abs(e.deltaY) > 50) {
-        lastScrollTime.current = now;
-        if (e.deltaY > 0) {
-          setCurrentSessionIndex(prev => (prev === MOCK_SESSIONS.length - 1 ? 0 : prev + 1));
-        } else {
-          setCurrentSessionIndex(prev => (prev === 0 ? MOCK_SESSIONS.length - 1 : prev - 1));
-        }
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel);
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, []);
-
-  const navItems = [
-    { id: 'overview', label: 'Overview', onClick: () => navigate('/dashboard') },
-    { id: 'about-us', label: 'About Us', onClick: () => navigate('/about') },
-    { id: 'discover', label: 'Discover', onClick: () => navigate('/discover') },
-    { id: 'open-mics', label: 'Open Mics', onClick: () => navigate('/open-mics') },
-    { id: 'communities', label: 'Communities', onClick: () => navigate('/communities') },
-    { id: 'song-feed', label: 'Song Feed' },
-    { id: 'beat-market', label: 'Beat Market' },
-    { id: 'my-studio', label: 'My Studio' },
-  ];
 
   return (
     <div className="flex flex-col h-screen bg-black text-white font-sans overflow-hidden selection:bg-white/20">
       
-      {/* Shared Glass Header */}
-      <div className="w-full mx-auto px-6 md:px-12 py-5 flex justify-between items-center z-[100] fixed top-0 left-0 right-0 bg-black/20 backdrop-blur-xl border-b border-white/5 flex-wrap gap-4 transition-all duration-300">
-         <div className="flex items-center">
-             <img 
-                 src="/cypherlogo 1.svg" 
-                 alt="Cypher Connect" 
-                 className="w-12 h-12 md:w-14 md:h-14 object-contain grayscale brightness-[5] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] transition-all cursor-pointer hover:scale-105" 
-             />
-         </div>
-         
-         <div className="hidden lg:flex items-center justify-center flex-1">
-            <LimelightNav items={navItems} defaultActiveIndex={3} />
-         </div>
-
-         <div className="flex items-center gap-4">
-             <div className="w-11 h-11 rounded-full border border-white/10 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md group">
-                <Mic2 className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
-             </div>
-         </div>
-      </div>
+      <SharedHeader activeIndex={3} />
 
       <main className="flex flex-1 overflow-hidden pt-28">
-        {/* Glass Sidebar */}
-        <div className="w-64 hidden md:flex flex-col gap-4 p-6 border-r border-white/5 h-full bg-black/20 backdrop-blur-sm">
-          <div className="flex flex-col gap-2">
+        {/* Left Sidebar - High Fidelity Navigation */}
+        <div className="w-80 hidden xl:flex flex-col p-8 border-r border-white/5 bg-black/20 backdrop-blur-md">
+          <div className="space-y-4">
+            <h2 className="px-4 text-[10px] font-black uppercase text-zinc-500 tracking-[0.4em] mb-6">Categories</h2>
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group",
-                  activeCategory === cat.id 
-                    ? "bg-white text-black font-black shadow-[0_0_20px_rgba(255,255,255,0.2)]" 
+                    "w-full flex items-center gap-5 px-6 py-4 rounded-[24px] transition-all group relative overflow-hidden",
+                    activeCategory === cat.id 
+                    ? "bg-white text-black shadow-[0_20px_40px_rgba(255,255,255,0.1)]" 
                     : "text-zinc-500 hover:text-white hover:bg-white/5"
                 )}
               >
@@ -182,7 +117,7 @@ export function OpenMicsPage() {
             ))}
           </div>
           
-          <button className="mt-4 flex items-center justify-center gap-2 bg-white text-black py-4 rounded-3xl font-black hover:bg-zinc-200 transition-all text-xs uppercase tracking-widest active:scale-95 shadow-[0_10px_30px_rgba(255,255,255,0.1)]">
+          <button className="mt-auto flex items-center justify-center gap-2 bg-white text-black py-4 rounded-3xl font-black hover:bg-zinc-200 transition-all text-xs uppercase tracking-widest active:scale-95 shadow-[0_10px_30px_rgba(255,255,255,0.1)]">
             <Plus size={18} />
             <span>Host Session</span>
           </button>

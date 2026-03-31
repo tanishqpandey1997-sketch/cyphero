@@ -1,26 +1,22 @@
-import { LimelightNav } from "@/components/ui/limelight-nav"
 import { 
   Users,
-  Flame,
-  LayoutGrid,
-  Search,
   MessageCircle,
   Heart,
   Share2,
   MoreHorizontal,
   Plus,
-  TrendingUp,
-  UserPlus,
   Play,
   Globe,
   Music,
   CheckCircle2,
-  Mic2
+  Flame,
+  LayoutGrid,
+  UserPlus
 } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
+import { SharedHeader } from "@/components/ui/shared-header"
 
 // --- Mock Data ---
 
@@ -29,7 +25,7 @@ const POSTS = [
     id: '1',
     community: 'Hardcore Cypher',
     communityHandle: '@hcc-pro',
-    communityAvatar: 'https://picsum.photos/seed/hcc/100/100',
+    communityAvatar: 'https://images.unsplash.com/photo-1514525253361-bee8a187c473?q=80&w=2864&auto=format&fit=crop',
     content: "Just dropped a new preset for the vocal chain. Perfect for that underground 90's vibe. Check it out and let us know! #rap #underground #cypher",
     likes: 154,
     comments: 23,
@@ -45,7 +41,7 @@ const POSTS = [
     id: '2',
     community: 'Sufi Soul',
     communityHandle: '@sufisoul',
-    communityAvatar: 'https://picsum.photos/seed/sufi/100/100',
+    communityAvatar: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2940&auto=format&fit=crop',
     content: "Evening sessions at the Virtual Stage 3. Connecting hearts through melody. Join us for the live stream tomorrow. ✨ #sufi #peace #melody",
     likes: 850,
     comments: 112,
@@ -67,78 +63,60 @@ const TRENDING = [
 ];
 
 export function CommunitiesPage() {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('communities');
-
-  const navItems = [
-    { id: 'overview', label: 'Overview', onClick: () => navigate('/dashboard') },
-    { id: 'about-us', label: 'About Us', onClick: () => navigate('/about') },
-    { id: 'discover', label: 'Discover', onClick: () => navigate('/discover') },
-    { id: 'open-mics', label: 'Open Mics', onClick: () => navigate('/open-mics') },
-    { id: 'communities', label: 'Communities', onClick: () => navigate('/communities') },
-    { id: 'song-feed', label: 'Song Feed' },
-    { id: 'beat-market', label: 'Beat Market' },
-    { id: 'my-studio', label: 'My Studio' },
-  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white font-sans selection:bg-white/20">
       
-      {/* Shared Glass Header */}
-      <div className="w-full mx-auto px-6 md:px-12 py-5 flex justify-between items-center z-[100] fixed top-0 left-0 right-0 bg-black/20 backdrop-blur-xl border-b border-white/5 flex-wrap gap-4 transition-all duration-300">
-         <div className="flex items-center">
-             <img 
-                 src="/cypherlogo 1.svg" 
-                 alt="Cypher Connect" 
-                 className="w-12 h-12 md:w-14 md:h-14 object-contain grayscale brightness-[5] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.3)] transition-all cursor-pointer hover:scale-105" 
-             />
+      <SharedHeader activeIndex={4}>
+         {/* Integrated Search Bar in Header */}
+         <div className="relative group w-full max-w-md ml-8 hidden xl:block">
+            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+               <Music size={16} className="text-zinc-500 group-focus-within:text-white transition-colors" />
+            </div>
+            <input 
+               type="text" 
+               placeholder="Search communities, posts, or artists..." 
+               className="w-full bg-white/5 border border-white/5 rounded-2xl py-3 pl-12 pr-4 text-xs font-bold focus:outline-none focus:ring-1 focus:ring-white/20 focus:bg-white/10 transition-all font-mono placeholder:text-zinc-700"
+            />
          </div>
-         
-         <div className="hidden lg:flex items-center justify-center flex-1">
-            <LimelightNav items={navItems} defaultActiveIndex={4} />
-         </div>
+      </SharedHeader>
 
-         <div className="flex items-center gap-4">
-             <div className="w-11 h-11 rounded-full border border-white/10 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md group">
-                <Mic2 className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
-             </div>
-         </div>
-      </div>
-
-      <main className="flex w-full max-w-7xl mx-auto pt-32 px-6 gap-10">
+      <main className="flex-1 max-w-[1400px] mx-auto w-full px-6 md:px-12 pt-32 pb-20 flex gap-12 items-start">
         
-        {/* Left Sidebar (Nav) */}
-        <div className="w-64 hidden xl:block sticky top-32 h-fit space-y-6">
-           <div className="flex flex-col gap-2 p-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px]">
+        {/* Left Sidebar (Navigation) */}
+        <div className="w-64 hidden xl:block sticky top-32 h-fit space-y-8">
+           <div className="space-y-2">
+              <h2 className="px-4 text-[10px] font-black uppercase text-zinc-500 tracking-[0.3em] mb-4">Feed</h2>
               {[
-                  { id: 'trending', label: 'Trending', icon: TrendingUp },
-                  { id: 'following', label: 'Following', icon: UserPlus },
-                  { id: 'communities', label: 'Communities', icon: Users }
+                { id: 'trending', label: 'Trending', icon: Flame },
+                { id: 'following', label: 'Following', icon: Users },
+                { id: 'communities', label: 'Communities', icon: LayoutGrid },
               ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveTab(item.id)}
-                    className={cn(
-                        "flex items-center gap-4 px-6 py-4 rounded-2xl transition-all uppercase text-[10px] tracking-[0.2em] font-black",
-                        activeTab === item.id 
-                            ? "bg-white text-black shadow-lg" 
-                            : "text-zinc-500 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    <item.icon size={18} />
-                    {item.label}
-                  </button>
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={cn(
+                    "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group",
+                    activeTab === item.id ? "bg-white text-black shadow-2xl" : "hover:bg-white/5 text-zinc-400 hover:text-white"
+                  )}
+                >
+                  <item.icon size={18} className={cn("transition-transform group-hover:scale-110", activeTab === item.id ? "text-black" : "text-zinc-500")} />
+                  <span className="text-[11px] font-black uppercase tracking-widest">{item.label}</span>
+                </button>
               ))}
            </div>
-           
-           <button className="w-full bg-white text-black py-5 rounded-[24px] font-black uppercase text-xs tracking-[0.2em] shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
-              <Plus size={18} />
-              Create Post
-           </button>
+
+           <div className="pt-8 border-t border-white/5">
+              <button className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-3xl bg-white/5 border border-white/10 hover:bg-white hover:text-black transition-all group">
+                 <Plus size={18} />
+                 <span className="text-[11px] font-black uppercase tracking-widest">Create Community</span>
+              </button>
+           </div>
         </div>
 
-        {/* Center Feed */}
-        <div className="flex-1 max-w-[680px] space-y-8 pb-20">
+        {/* Central Feed */}
+        <div className="flex-1 space-y-10">
            {POSTS.map((post) => (
                <motion.div 
                  key={post.id}
@@ -196,7 +174,7 @@ export function CommunitiesPage() {
                   <div className="flex items-center gap-6 pt-2 border-t border-white/5">
                       <button className="flex items-center gap-2 group/btn">
                          <div className="p-3 rounded-full bg-white/5 group-hover/btn:bg-white group-hover/btn:text-black transition-all">
-                            <Heart size={18} fill={post.likes > 500 ? "currentColor" : "none"} />
+                            <Heart size={18} />
                          </div>
                          <span className="text-[11px] font-black tracking-widest">{post.likes}</span>
                       </button>
