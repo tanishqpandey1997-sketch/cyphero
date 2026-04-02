@@ -15,22 +15,13 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-interface MenuItem {
-  id: string;
-  label: string;
-  icon: any;
-  onClick?: () => void;
-}
-
-interface MenuSection {
-  items: MenuItem[];
-}
+import { useAuth } from '@/context/AuthContext';
 
 export function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -42,7 +33,13 @@ export function UserMenu() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const menuSections: MenuSection[] = [
+  const handleLogout = async () => {
+    await logout();
+    navigate('/sign-in');
+    setIsOpen(false);
+  };
+
+  const menuSections = [
     {
       items: [
         { id: 'projects', label: 'Projects', icon: Music },
@@ -63,7 +60,7 @@ export function UserMenu() {
     {
       items: [
         { id: 'settings', label: 'Settings', icon: Settings },
-        { id: 'logout', label: 'Log out', icon: LogOut },
+        { id: 'logout', label: 'Log out', icon: LogOut, onClick: handleLogout },
       ]
     },
     {
@@ -81,9 +78,9 @@ export function UserMenu() {
         className="w-11 h-11 rounded-full border border-white/10 bg-white/5 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md overflow-hidden group focus:outline-none"
       >
         <img 
-          src="/travis-scott.jpg" 
+          src={user?.photoURL || "https://images.unsplash.com/photo-1511367461989-f85a21fda181?q=80&w=2864&auto=format&fit=crop"} 
           alt="User Profile" 
-          className="w-full h-full object-cover grayscale brightness-125 group-hover:grayscale-0 transition-all duration-300 scale-110"
+          className="w-full h-full object-cover group-hover:scale-110 transition-all duration-300"
         />
       </button>
 
@@ -104,10 +101,10 @@ export function UserMenu() {
               className="p-5 flex items-center gap-4 bg-white/[0.02] border-b border-white/5 hover:bg-white/[0.04] transition-colors cursor-pointer group"
             >
                <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10">
-                  <img src="/travis-scott.jpg" alt="Profile" className="w-full h-full object-cover grayscale brightness-110" />
+                  <img src={user?.photoURL || "https://images.unsplash.com/photo-1511367461989-f85a21fda181?q=80&w=2864&auto=format&fit=crop"} alt="Profile" className="w-full h-full object-cover" />
                </div>
                <div className="flex-1">
-                  <h3 className="text-sm font-bold text-white tracking-widest uppercase">Tanishq Pandey</h3>
+                  <h3 className="text-sm font-bold text-white tracking-widest uppercase truncate max-w-[140px]">{user?.displayName || "Anonymous"}</h3>
                   <p className="text-[10px] text-zinc-500 font-medium tracking-[0.2em] uppercase group-hover:text-white transition-colors">View Profile</p>
                </div>
                <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-all transform group-hover:translate-x-1" />
@@ -122,7 +119,7 @@ export function UserMenu() {
                         key={item.id}
                         onClick={() => {
                           item.onClick && item.onClick();
-                          setIsOpen(false);
+                          if (!item.onClick) setIsOpen(false);
                         }}
                         className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all group"
                       >

@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { UserMenu } from "@/components/ui/user-menu";
 import { LimelightNav } from "@/components/ui/limelight-nav";
 import React from 'react';
+import { Bot } from "lucide-react";
+import { useCypherBot } from "@/context/CypherBotContext";
 
 interface SharedHeaderProps {
   activeIndex: number;
@@ -10,6 +12,7 @@ interface SharedHeaderProps {
 
 export function SharedHeader({ activeIndex, children }: SharedHeaderProps) {
   const navigate = useNavigate();
+  const { toggleBot } = useCypherBot();
 
   const navItems = [
     { id: 'overview', label: 'Overview', onClick: () => navigate('/dashboard') },
@@ -17,6 +20,7 @@ export function SharedHeader({ activeIndex, children }: SharedHeaderProps) {
     { id: 'discover', label: 'Discover', onClick: () => navigate('/discover') },
     { id: 'open-mics', label: 'Open Mics', onClick: () => navigate('/open-mics') },
     { id: 'communities', label: 'Communities', onClick: () => navigate('/communities') },
+    { id: 'beat-market', label: 'Beat Market', onClick: () => navigate('/beat-market') },
   ];
 
   return (
@@ -37,8 +41,15 @@ export function SharedHeader({ activeIndex, children }: SharedHeaderProps) {
           <LimelightNav items={navItems} defaultActiveIndex={activeIndex} />
        </div>
 
-       {/* User Profile */}
+       {/* User Profile + AI Bot */}
        <div className="flex items-center gap-4">
+          <button 
+            onClick={toggleBot}
+            className="p-3 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all group"
+            title="CypherBot AI"
+          >
+            <Bot size={18} className="group-hover:rotate-12 transition-transform" />
+          </button>
           <UserMenu />
        </div>
     </header>

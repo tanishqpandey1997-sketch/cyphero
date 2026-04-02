@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
 import {
   Play,
   Pause,
@@ -54,7 +53,6 @@ const CustomSlider = ({
 
 const AudioPlayer = ({
   src,
-  cover,
   title,
 }: {
   src: string;

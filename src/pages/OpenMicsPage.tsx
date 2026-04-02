@@ -1,26 +1,19 @@
 import { 
-  Mic2, 
   Users, 
   MapPin, 
   Clock, 
   Music,
   Video, 
-  Star,
   Plus,
-  Play,
-  Heart,
   MessageSquare,
-  Share2,
   ChevronUp,
   ChevronDown,
   TrendingUp,
   Radio,
   Gamepad,
-  Search,
-  Filter,
   CheckCircle2
 } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { SharedHeader } from "@/components/ui/shared-header"

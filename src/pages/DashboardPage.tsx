@@ -1,7 +1,9 @@
 import { SharedHeader } from "@/components/ui/shared-header"
 import ScrollExpandMedia from "@/components/blocks/scroll-expansion-hero"
+import { useAuth } from "@/context/AuthContext"
 
 export function DashboardPage() {
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen w-full bg-black text-white relative selection:bg-white/20">
@@ -19,11 +21,11 @@ export function DashboardPage() {
       >
         <div className="max-w-4xl mx-auto space-y-12">
           <div className="text-center space-y-6">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-              The Evolution of Sound
+            <h2 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter text-white">
+              Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-br from-zinc-300 to-zinc-700">{user?.displayName?.split(' ')[0] || "Artist"}</span>
             </h2>
-            <p className="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-              Welcome to the underground rhythm. CypherConnect is more than a platform; it's a movement where every voice finds its frequency.
+            <p className="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto font-medium tracking-tight">
+              The underground is waiting. Your next rhythm starts here. CypherConnect is your frequency, your movement, your stage.
             </p>
           </div>
 

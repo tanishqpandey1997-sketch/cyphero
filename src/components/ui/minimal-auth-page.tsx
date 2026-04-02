@@ -3,9 +3,29 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeftIcon } from 'lucide-react';
 import { Particles } from '@/components/ui/particles';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 export function MinimalAuthPage() {
     const navigate = useNavigate();
+    const { login, user } = useAuth();
+
+    React.useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
+
+    const [isLoggingIn, setIsLoggingIn] = React.useState(false);
+
+    const handleLogin = async () => {
+        setIsLoggingIn(true);
+        try {
+            await login();
+        } finally {
+            setIsLoggingIn(false);
+        }
+    };
+
 	return (
 		<div className="relative md:h-screen md:overflow-hidden w-full bg-black text-white">
 			<Particles
@@ -35,7 +55,7 @@ export function MinimalAuthPage() {
                         <img 
                             src="/cypherlogo 1.svg" 
                             alt="CypherConnect Logo" 
-                            className="w-16 h-16 object-contain grayscale brightness-[5] contrast-[2] drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]" 
+                            className="w-32 h-32 object-contain grayscale brightness-[5] contrast-[2] drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]" 
                         />
 					</div>
 					<div className="flex flex-col space-y-2 text-center pb-4">
@@ -46,10 +66,25 @@ export function MinimalAuthPage() {
 							Sign in with Google to access your dashboard.
 						</p>
 					</div>
-					<div className="space-y-4 pt-4">
-						<Button type="button" size="lg" onClick={() => navigate('/dashboard')} className="w-full bg-white text-black hover:bg-gray-200 py-6 text-lg font-semibold rounded-[1.4rem] transition-all duration-300 tracking-wide">
-							<GoogleIcon className="mr-3 size-5" />
-							Continue with Google
+					<div className="space-y-4 pt-4 text-center">
+						<Button 
+                            disabled={isLoggingIn}
+                            type="button" 
+                            size="lg" 
+                            onClick={handleLogin} 
+                            className="w-full bg-white text-black hover:bg-gray-200 py-6 text-lg font-semibold rounded-[1.4rem] transition-all duration-300 tracking-wide disabled:opacity-50"
+                        >
+							{isLoggingIn ? (
+                                <span className="flex items-center gap-2">
+                                    <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                                    Connecting...
+                                </span>
+                            ) : (
+                                <>
+                                    <GoogleIcon className="mr-3 size-5" />
+                                    Continue with Google
+                                </>
+                            )}
 						</Button>
 					</div>
 					<p className="text-gray-500 mt-8 text-sm text-center pt-6">
