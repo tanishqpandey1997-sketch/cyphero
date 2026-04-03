@@ -43,10 +43,10 @@ export function MinimalAuthPage() {
 				<div className="bg-[radial-gradient(50%_50%_at_50%_50%,rgba(255,255,255,0.04)_0,rgba(255,255,255,0.01)_80%,transparent_100%)] absolute top-0 left-0 h-[320px] w-[60px] -translate-y-[87.5px] -rotate-45 rounded-full" />
 			</div>
 			<div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-4">
-				<Button variant="ghost" className="absolute top-4 left-4 text-white hover:bg-white/20" asChild>
-					<Link to="/">
-						<ChevronLeftIcon className="me-1 size-4" />
-						Home
+				<Button variant="ghost" className="absolute top-8 left-8 text-white hover:bg-white/20 transition-all duration-300" asChild>
+					<Link to="/" className="flex items-center gap-1.5">
+						<ChevronLeftIcon className="size-4" />
+						<span className="font-medium tracking-wide">Home</span>
 					</Link>
 				</Button>
 

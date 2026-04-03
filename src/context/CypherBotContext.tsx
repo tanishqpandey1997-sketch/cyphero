@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode, useCallback } from "react";
+import { createContext, useContext, useState, type ReactNode, useCallback, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface Message {
@@ -23,30 +23,59 @@ const CypherBotContext = createContext<CypherBotContextType | undefined>(undefin
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-flash",
+    model: "gemini-1.5-flash-latest",
     systemInstruction: `You are CypherBot, the legendary AI music producer and industry mentor for the CypherConnect platform. 
-    Your persona is edgy, futuristic, and highly technical. You talk like a seasoned pro who has worked in high-end studios but cares about the underground.
+    Your persona is edgy, futuristic, and highly technical. You talk like a seasoned pro who has worked in high-end studios (think SSL consoles and Neve preamps) but cares about the underground.
     
-    Expertise:
-    1. Audio Engineering: Mixing frequencies (EQ, Compression), Sidechaining, Vocal Chains.
-    2. Songwriting: Rhyme schemes, flow patterns, lyrical themes.
-    3. Community: How to build a brand on CypherConnect, finding collabs.
+    Technical Expertise:
+    1. Audio Engineering:
+       - Frequencies: Give specific advice (e.g., "Cut the mud at 200Hz-400Hz", "Add air at 12kHz with a high shelf").
+       - Dynamics: Discuss ratios (4:1 for vocals), attack/release times, and sidechaining the 808 to the kick.
+       - Vocal Chain: Recommend order (De-esser > EQ > Compressor > Saturation).
+    2. Songwriting & Flow:
+       - Cadence: Discuss triplets, off-beat rhythmic patterns, and internal rhyme schemes.
+       - Structure: Analyze verse-hook transitions and building tension.
+    3. Industry:
+       - Branding: Professional advice on building a "sound" and community on CypherConnect.
     
-    If a user asks for feedback, give specific technical advice (e.g., "Boost the 5kHz on those vocals to cut through the 808s").
-    Keep responses concise, impactful, and "in the culture." Never be overly corporate.`
+    Style:
+    - Keep responses concise and raw.
+    - Use culture-specific slang (e.g., "cookin'", "drop", "fire", "locked in") but remain professional.
+    - If a user asks for feedback, be a "tough but fair" mentor. Give them the harsh truth and then the technical fix.`
 });
 
 export function CypherBotProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([
-        { 
-            id: '1', 
-            role: 'assistant', 
-            content: "Yo! I'm CypherBot. Your personal producer AI. I'm tapped into the global sound. What we cookin' today? Mix feedback? New hooks? Bar analysis? Let me know.", 
-            timestamp: new Date() 
+    
+    // Load persisted messages from localStorage
+    const [messages, setMessages] = useState<Message[]>(() => {
+        const saved = localStorage.getItem('cypher_bot_messages');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                return parsed.map((m: any) => ({
+                    ...m,
+                    timestamp: new Date(m.timestamp)
+                }));
+            } catch (e) {
+                console.error("Failed to parse saved messages:", e);
+            }
         }
-    ]);
+        return [
+            { 
+                id: '1', 
+                role: 'assistant', 
+                content: "Yo! I'm CypherBot. Your personal producer AI. I'm tapped into the global sound. What we cookin' today? Mix feedback? New hooks? Bar analysis? Let me know.", 
+                timestamp: new Date() 
+            }
+        ];
+    });
+
+    // Save messages to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem('cypher_bot_messages', JSON.stringify(messages));
+    }, [messages]);
 
     const toggleBot = useCallback(() => setIsOpen(prev => !prev), []);
 
@@ -58,14 +87,19 @@ export function CypherBotProvider({ children }: { children: ReactNode }) {
             timestamp: new Date()
         };
 
-        setMessages(prev => [...prev, userMessage]);
+        const updatedMessages = [...messages, userMessage];
+        setMessages(updatedMessages);
         setIsTyping(true);
 
         try {
             console.log("CypherBot: Sending message to Gemini...", content);
             
             // Prepare chat history for Gemini
-            const history = messages.map(m => ({
+            // Rule: History MUST start with a 'user' role message
+            const firstUserIndex = updatedMessages.findIndex(m => m.role === 'user');
+            const historyMessages = firstUserIndex !== -1 ? updatedMessages.slice(firstUserIndex, -1) : [];
+
+            const history = historyMessages.slice(-20).map(m => ({
                 role: m.role === 'user' ? 'user' : 'model',
                 parts: [{ text: m.content }]
             }));

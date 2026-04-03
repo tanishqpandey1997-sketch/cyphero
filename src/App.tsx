@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import { BackgroundPaths } from "@/components/ui/background-paths";
 import { MinimalAuthPage } from "@/components/ui/minimal-auth-page";
 import { DashboardPage } from "@/pages/DashboardPage";
@@ -28,6 +29,15 @@ function CypherBotWrapper() {
 }
 
 function App() {
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <Router>
       <AuthProvider>
